@@ -1,9 +1,9 @@
 ---
 galaxy_info:
   author: Jeffrey van Pelt
-  description: Some role
+  description: Ansible Controller with gpg-agent support
   company:
-  role_name: empty
+  role_name: ansible_controller
 
   license: GPLv3
 
@@ -23,7 +23,8 @@ galaxy_info:
         - 7
 
   galaxy_tags:
-    - some
-    - tags
+    - ansible
+    - controller
+    - controlnode
 
 dependencies: []
