@@ -1,0 +1,10 @@
+---
+- name: 'Ensure Ansible signing key'
+  apt_key:
+    url: "{{ deb_ansible_controller_repo_key }}"
+
+- name: 'Ensure Ansible repository'
+  apt_repository:
+    repo: "{{ deb_ansible_controller_repo }}"
+    state: 'present'
+    filename: 'ansible'

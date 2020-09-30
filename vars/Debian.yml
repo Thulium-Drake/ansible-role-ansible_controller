@@ -1,0 +1,2 @@
+---
+ansible_controller_gpgagent_pkg: 'gpg-agent'

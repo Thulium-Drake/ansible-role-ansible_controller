@@ -1,0 +1,29 @@
+---
+galaxy_info:
+  author: Jeffrey van Pelt
+  description: Some role
+  company:
+  role_name: empty
+
+  license: GPLv3
+
+  min_ansible_version: 2.9
+
+  platforms:
+    - name: Debian
+      versions:
+        - stretch
+        - buster
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal
+    - name: EL
+      versions:
+        - 7
+
+  galaxy_tags:
+    - some
+    - tags
+
+dependencies: []

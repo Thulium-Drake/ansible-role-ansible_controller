@@ -1,0 +1,11 @@
+---
+- name: 'Ensure Ansible signing key'
+  rpm_key:
+    state: 'present'
+    key: "{{ rhel_ansible_controller_repo_key }}"
+
+- name: 'Ensure Ansible repository'
+  yum_repository:
+    baseurl: "{{ rhel_ansible_controller_repo }}"
+    file: 'ansible'
+    state: 'present'

@@ -1,0 +1,27 @@
+---
+# Ansible package (Debian-like already have ansible-base available)
+ansible_controller_ansible_pkg: 'ansible'
+
+# Controls whether this role sets up the repos to install Ansible from
+ansible_controller_setup_repos: true
+
+# Git Repository to retrieve Ansible utils from
+ansible_controller_utils_repo: 'https://github.com/Thulium-Drake/ansible-utils'
+
+###
+# Debian
+###
+# URL of the Ansible repository to use
+deb_ansible_controller_repo: 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu eoan main'
+
+# URL where the signing key of the above repo can be found
+deb_ansible_controller_repo_key: 'https://keyserver.ubuntu.com/pks/lookup?fingerprint=on&op=index&search=0x6125E2A8C77F2818FB7BD15B93C4A3FD7BB9C367'
+
+###
+# RedHat
+###
+# URL of the Ansible repository to use
+rhel_ansible_controller_repo: 'https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/'
+
+# URL where the signing key of the above repo can be found
+rhel_ansible_controller_repo_key: 'https://releases.ansible.com/keys/RPM-GPG-KEY-ansible-release.pub'
