@@ -8,6 +8,9 @@ It will:
 * Create a new user
 * Setup GPG agent for this user (Add your own GPG key, see below)
 
+For EL7 you need to install GnuPG2.2 in order to fully use all of the tools this role provides. This package can
+be found on https://copr.fedorainfracloud.org/coprs/icon/lfit/package/gnupg22-static/
+
 ## Ansible Projects
 The Controller uses the concept of 'Ansible Projects', these are folders containing everything Ansible
 needs to do it's job. They should have the following structure:
@@ -17,6 +20,7 @@ needs to do it's job. They should have the following structure:
 |-- ansible.cfg                         # Ansible config
 |-- cache                               # Fact cache
 |-- collections                         # Collections required for the project
+|-- files -> playbooks/files            # Convenience symlink to files
 |-- group_vars -> inventory/group_vars  # Convenience symlink to inventory vars
 |-- host_vars -> inventory/host_vars/   # Convenience symlink to inventory vars
 |-- inventory                           # Directory with inventory files
@@ -53,6 +57,8 @@ echo 'my-ansible-vault-key' | gpg -e -r ansible@localhost > /opt/ansible/vaults/
 In order to allow for unattended runs, the 'ansible' user is set up to use GPG agent to hold a key once unlocked.
 A cronjob that checks if any keys are locked is run once per hour, it will generate a cron mail when locked keys
 are found.
+
+I found that ECC keys are not working that well on EL7, but do work fine on Debian 10+
 
 In order to unlock the GPG key, run the ```gpgkey -u``` command and provide the passphrase.
 

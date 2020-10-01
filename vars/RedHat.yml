@@ -1,2 +1,2 @@
 ---
-ansible_controller_gpgagent_pkg: 'gnupg2'
+ansible_controller_gpgagent_pkg: 'gnupg22-static'
