@@ -1,3 +1,4 @@
+[![Build Status](https://drone.element-networks.nl/api/badges/Ansible/role-ansible_controller/status.svg)](https://drone.element-networks.nl/Ansible/role-ansible_controller)
 # Controller setup
 This role sets up a system with a dedicated Ansible user for use as a Ansible Control Node.
 
