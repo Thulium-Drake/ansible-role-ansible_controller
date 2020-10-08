@@ -1,2 +1,3 @@
 ---
 ansible_controller_gpgagent_pkg: 'gpg-agent'
+ansible_controller_pip_pkg: 'python3-pip'

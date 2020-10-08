@@ -11,8 +11,14 @@
   package:
     name:
       - 'git'
+      - "{{ ansible_controller_pip_pkg }}"
       - "{{ ansible_controller_ansible_pkg }}"
       - "{{ ansible_controller_gpgagent_pkg }}"
+
+- name: 'Ensure PiPy tools'
+  pip:
+    name: 'ansible-merge-vars'
+    state: 'present'
 
 - name: 'Ensure useraccount'
   user:

@@ -59,8 +59,6 @@ In order to allow for unattended runs, the 'ansible' user is set up to use GPG a
 A cronjob that checks if any keys are locked is run once per hour, it will generate a cron mail when locked keys
 are found.
 
-I found that ECC keys are not working that well on EL7, but do work fine on Debian 10+
-
 In order to unlock the GPG key, run the ```gpgkey -u``` command and provide the passphrase.
 
 To create a GPG key compatible for the Ansible Controller, follow the procedure below:
