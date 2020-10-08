@@ -1,3 +1,4 @@
 ---
 ansible_controller_gpgagent_pkg: 'gpg-agent'
 ansible_controller_pip_pkg: 'python3-pip'
+ansible_controller_jmespath_pkg: 'python3-jmespath'

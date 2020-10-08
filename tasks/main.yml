@@ -12,6 +12,7 @@
     name:
       - 'git'
       - "{{ ansible_controller_pip_pkg }}"
+      - "{{ ansible_controller_jmespath_pkg }}"
       - "{{ ansible_controller_ansible_pkg }}"
       - "{{ ansible_controller_gpgagent_pkg }}"
 
@@ -19,6 +20,7 @@
   pip:
     name: 'ansible-merge-vars'
     state: 'present'
+    umask: 0022
 
 - name: 'Ensure useraccount'
   user:

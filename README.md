@@ -12,6 +12,8 @@ It will:
 For EL7 you need to install GnuPG2.2 in order to fully use all of the tools this role provides. This package can
 be found on https://copr.fedorainfracloud.org/coprs/icon/lfit/package/gnupg22-static/
 
+And you need to enable EPEL on your system for some dependencies.
+
 ## Ansible Projects
 The Controller uses the concept of 'Ansible Projects', these are folders containing everything Ansible
 needs to do it's job. They should have the following structure:
