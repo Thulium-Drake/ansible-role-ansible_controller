@@ -20,7 +20,7 @@
   pip:
     name: 'ansible-merge-vars'
     state: 'present'
-    umask: 0022
+    umask: "0022"
 
 - name: 'Ensure useraccount'
   user:
