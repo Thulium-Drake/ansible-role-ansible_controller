@@ -32,11 +32,10 @@
         name: "Ansible Galaxy",
         image: "registry.element-networks.nl/tools/molecule",
         commands: [
-          "ansible-galaxy login --github-token $$GITHUB_TOKEN",
-          "ansible-galaxy import Thulium-Drake ansible-role-ansible_controller --role-name=ansible_controller",
+          "ansible-galaxy import --token $$GALAXY_TOKEN Thulium-Drake ansible-role-ansible_controller --role-name=ansible_controller",
         ],
         environment:
-          { GITHUB_TOKEN: { from_secret: "github_token" } },
+          { GALAXY_TOKEN: { from_secret: "galaxy_token" } },
       },
     ],
     depends_on: [
