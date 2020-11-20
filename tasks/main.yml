@@ -1,6 +1,6 @@
 ---
 - name: 'Include OS specific vars'
-  include_vars: "{{ ansible_facts['os_family'] }}.yml"
+  include_vars: "{{ ansible_facts['os_family'] }}-{{ ansible_facts['distribution_major_version'] }}.yml"
   no_log: true
 
 - name: 'Ensure repositories'
