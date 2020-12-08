@@ -1,4 +1,5 @@
 ---
 ansible_controller_gpgagent_pkg: 'gnupg22-static'
 ansible_controller_pip_pkg: 'python2-pip'
+ansible_controller_requests_pkg: 'python2-requests'
 ansible_controller_jmespath_pkg: 'python2-jmespath'
