@@ -7,16 +7,28 @@
   include_tasks: "repos-{{ ansible_facts['os_family'] }}.yml"
   when: ansible_controller_setup_repos
 
-- name: 'Ensure tools'
+- name: 'Ensure supporting tools'
   package:
     name:
       - 'git'
       - "{{ ansible_controller_pip_pkg }}"
       - "{{ ansible_controller_jmespath_pkg }}"
-      - "{{ ansible_controller_ansible_pkg }}"
       - "{{ ansible_controller_gpgagent_pkg }}"
 
-- name: 'Ensure PiPy tools'
+- name: 'Ensure Ansible from Package Manager'
+  package:
+    name: "{{ ansible_controller_ansible_pkg }}"
+    state: 'present'
+  when: not ansible_controller_ansible_from_pip
+
+- name: 'Ensure Ansible from PyPi'
+  pip:
+    name: "{{ ansible_controller_ansible_pkg }}"
+    state: 'present'
+    umask: "0022"
+  when: ansible_controller_ansible_from_pip
+
+- name: 'Ensure extra PiPy tools'
   pip:
     name: 'ansible-merge-vars'
     state: 'present'

@@ -2,6 +2,9 @@
 # Ansible package (Debian-like already have ansible-base available)
 ansible_controller_ansible_pkg: 'ansible'
 
+# Install ansible from PyPi or package manager
+ansible_controller_ansible_from_pip: false
+
 # Controls whether this role sets up the repos to install Ansible from
 ansible_controller_setup_repos: true
 
