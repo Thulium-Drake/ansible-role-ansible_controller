@@ -15,6 +15,7 @@
       - "{{ ansible_controller_jmespath_pkg }}"
       - "{{ ansible_controller_gpgagent_pkg }}"
       - "{{ ansible_controller_requests_pkg }}"
+      - "{{ ansible_controller_netaddr_pkg }}"
 
 - name: 'Ensure Ansible from Package Manager'
   package:
