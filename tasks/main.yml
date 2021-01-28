@@ -88,7 +88,9 @@
     dest: "/usr/local/bin/{{ tool_link }}"
     state: 'link'
   loop:
+    - 'encryptansible'
     - 'runansible'
+    - 'showansible'
   loop_control:
     loop_var: 'tool_link'
 
