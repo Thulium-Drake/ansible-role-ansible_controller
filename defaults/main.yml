@@ -18,7 +18,7 @@ ansible_controller_utils_repo: 'https://github.com/Thulium-Drake/ansible-utils'
 deb_ansible_controller_repo: 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu eoan main'
 
 # URL where the signing key of the above repo can be found
-deb_ansible_controller_repo_key: 'https://keyserver.ubuntu.com/pks/lookup?fingerprint=on&op=index&search=0x6125E2A8C77F2818FB7BD15B93C4A3FD7BB9C367'
+deb_ansible_controller_repo_key: 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x6125e2a8c77f2818fb7bd15b93c4a3fd7bb9c367'
 
 ###
 # RedHat
