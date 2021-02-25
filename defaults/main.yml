@@ -15,7 +15,7 @@ ansible_controller_utils_repo: 'https://github.com/Thulium-Drake/ansible-utils'
 # Debian
 ###
 # URL of the Ansible repository to use
-deb_ansible_controller_repo: 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu eoan main'
+deb_ansible_controller_repo: 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu bionic main'
 
 # URL where the signing key of the above repo can be found
 deb_ansible_controller_repo_key: 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x6125e2a8c77f2818fb7bd15b93c4a3fd7bb9c367'
