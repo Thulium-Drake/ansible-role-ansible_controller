@@ -32,7 +32,9 @@
 
 - name: 'Ensure extra PiPy tools'
   pip:
-    name: 'ansible-merge-vars'
+    name:
+      - 'ansible-merge-vars'
+      - 'ara'
     state: 'present'
     umask: "0022"
 
