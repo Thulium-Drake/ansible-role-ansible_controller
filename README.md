@@ -4,7 +4,7 @@ This role sets up a system with a dedicated Ansible user for use as a Ansible Co
 
 It will:
 * Enable Ansible repository
-* Install ansible
+* Install ansible, ansible-merge-vars, ARA client
 * Download the Ansible Utils repository to your system (https://github.com/thulium-drake/ansible-utils)
 * Create a new user
 * Setup GPG agent for this user (Add your own GPG key, see below)
