@@ -86,6 +86,7 @@
     dest: '/opt/ansible/tools/ansible-utils'
     force: true
     umask: '0022'
+  environment: "{{ proxy_env }}"
 
 - name: 'Ensure dir symlinks in Ansible Runner home'
   file:
