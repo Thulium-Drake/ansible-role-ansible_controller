@@ -23,12 +23,25 @@
     state: 'present'
   when: not ansible_controller_ansible_from_pip
 
+- name: 'Set environment facts (placeholder)'
+  set_fact:
+    proxy_env:
+      empty_var: 'Just_a_placeholder'
+
+- name: 'Set environment facts (http_proxy)'
+  set_fact:
+    proxy_env:
+      http_proxy: "{{ http_proxy_url }}"
+      https_proxy: "{{ http_proxy_url }}"
+  when: http_proxy_url is defined
+
 - name: 'Ensure Ansible from PyPi'
   pip:
     name: "{{ ansible_controller_ansible_pkg }}"
     state: 'present'
     umask: "0022"
   when: ansible_controller_ansible_from_pip
+  environment: "{{ proxy_env }}"
 
 - name: 'Ensure extra PiPy tools'
   pip:
@@ -37,6 +50,7 @@
       - 'ara'
     state: 'present'
     umask: "0022"
+  environment: "{{ proxy_env }}"
 
 - name: 'Ensure useraccount'
   user:
