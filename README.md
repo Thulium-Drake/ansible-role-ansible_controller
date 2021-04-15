@@ -9,6 +9,9 @@ It will:
 * Create a new user
 * Setup GPG agent for this user (Add your own GPG key, see below)
 
+If you have a proxy, you need to set ```http_proxy_url```, so this role is able to download all dependencies
+from PyPi.
+
 For EL7 you need to install GnuPG2.2 in order to fully use all of the tools this role provides. This package can
 be found on https://copr.fedorainfracloud.org/coprs/icon/lfit/package/gnupg22-static/
 
