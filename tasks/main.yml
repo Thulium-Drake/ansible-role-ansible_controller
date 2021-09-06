@@ -16,6 +16,7 @@
       - "{{ ansible_controller_gpgagent_pkg }}"
       - "{{ ansible_controller_requests_pkg }}"
       - "{{ ansible_controller_netaddr_pkg }}"
+      - "{{ ansible_controller_passlib_pkg }}"
 
 - name: 'Ensure Ansible from Package Manager'
   package:
