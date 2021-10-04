@@ -3,10 +3,6 @@
   include_vars: "{{ ansible_facts['os_family'] }}-{{ ansible_facts['distribution_major_version'] }}.yml"
   no_log: true
 
-- name: 'Ensure repositories'
-  include_tasks: "repos-{{ ansible_facts['os_family'] }}.yml"
-  when: ansible_controller_setup_repos
-
 - name: 'Ensure supporting tools'
   package:
     name:
@@ -17,6 +13,10 @@
       - "{{ ansible_controller_requests_pkg }}"
       - "{{ ansible_controller_netaddr_pkg }}"
       - "{{ ansible_controller_passlib_pkg }}"
+
+- name: 'Ensure repositories'
+  include_tasks: "repos-{{ ansible_facts['os_family'] }}.yml"
+  when: ansible_controller_setup_repos
 
 - name: 'Ensure Ansible from Package Manager'
   package:
