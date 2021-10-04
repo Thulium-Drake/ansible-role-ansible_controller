@@ -18,11 +18,22 @@
   include_tasks: "repos-{{ ansible_facts['os_family'] }}.yml"
   when: ansible_controller_setup_repos
 
-- name: 'Ensure Ansible from Package Manager'
-  package:
+- name: 'Ensure Ansible from Package Manager (Debian-like)'
+  apt:
     name: "{{ ansible_controller_ansible_pkg }}"
     state: 'present'
-  when: not ansible_controller_ansible_from_pip
+    install_recommends: false
+  when:
+    - not ansible_controller_ansible_from_pip
+    - ansible_facts['os_family'] == 'Debian'
+
+- name: 'Ensure Ansible from Package Manager (RHEL-like)'
+  yum:
+    name: "{{ ansible_controller_ansible_pkg }}"
+    state: 'present'
+  when:
+    - not ansible_controller_ansible_from_pip
+    - ansible_facts['os_family'] == 'RedHat'
 
 - name: 'Set environment facts (placeholder)'
   set_fact:
