@@ -71,50 +71,89 @@ To create a GPG key compatible for the Ansible Controller, follow the procedure 
 First you need a new (sub)key, note that if you want to add a EC key, your master key must be EC as well.
 
 * Generate a new key (if you already have one, skip these steps)
+```
  gpg --expert --full-gen-key
+```
 * Select 'ECC and ECC'
+```
  9
+```
 * Select 'Curve 25519'
+```
  1
+```
 * Set the expiration date (below sets the key to never expire)
+```
  0
+```
 * Accept the notification that the key will never expire
+```
  y
+```
 * Put in your name, email address and a comment (if you so desire)
+```
  Ansible
  ansible@localhost
  Ansible Controller GPG key
+```
 * Accept the changes
+```
  o
+```
 * Type in a strong passphrase
 
 Now add a new subkey with the Authenticate flag
 
 * Open the GPG utility
+```
  gpg --expert --edit-key KEYID
+```
 * Add a new subkey
+```
  addkey
+```
 * Select 'ECC (set your own capabilities)'
+```
  11
+```
 * Disable 'Sign'
+```
  s
+```
 * Enable 'Authenticate'
+```
  a
+```
 * Exit the menu
+```
  q
+```
 * Select 'Curve 25519'
+```
  1
+```
 * Set the expiration date (below sets the key to never expire)
+```
  0
+```
 * Accept the notification that the key will never expire
+```
  y
+```
 * We really are sure...
+```
  y
+```
 * Put in your passphrase
+* Save and exit
+```
+ save
+```
 
 * Create a new backup of the GPG keys
+```
  gpg --armor --export-secret-keys > gpg-key.txt
-
+```
 
 ## Running Ansible jobs
 After preparing the Controller, you can run Ansible jobs as follows:
