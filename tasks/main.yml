@@ -128,9 +128,7 @@
     src: '/opt/ansible/tools/ansible-utils/gpgkey'
     dest: '/usr/local/bin/gpgkey'
     state: 'link'
-  when:
-    - ansible_facts['os_family'] != 'RedHat'
-    - ansible_facts['distribution_major_version'] != '7'
+  when: (ansible_facts['os_family'] != 'RedHat' and ansible_facts['distribution_major_version'] > '7')
 
 - name: 'Ensure gpgkey symlink (EL7)'
   file:
