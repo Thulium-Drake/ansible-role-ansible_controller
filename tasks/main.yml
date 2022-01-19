@@ -8,6 +8,7 @@
     name:
       - 'git'
       - "{{ ansible_controller_pip_pkg }}"
+      - "{{ ansible_controller_cryptography_pkg }}"
       - "{{ ansible_controller_jmespath_pkg }}"
       - "{{ ansible_controller_gpgagent_pkg }}"
       - "{{ ansible_controller_requests_pkg }}"

@@ -1,6 +1,7 @@
 ---
 ansible_controller_gpgagent_pkg: 'gnupg2'
 ansible_controller_pip_pkg: 'python3-pip'
+ansible_controller_cryptography_pkg: 'python3-cryptography'
 ansible_controller_requests_pkg: 'python3-requests'
 ansible_controller_jmespath_pkg: 'python3-jmespath'
 ansible_controller_netaddr_pkg: 'python3-netaddr'
