@@ -1,11 +1,12 @@
 ---
-# Ansible package (Debian-like already have ansible-base available)
-ansible_controller_ansible_pkg: 'ansible'
+# Ansible package
+ansible_controller_ansible_pkg: 'ansible-core'
 
-# Install ansible from PyPi or package manager
+# Install Ansible from PyPi or package manager
 ansible_controller_ansible_from_pip: false
 
 # Controls whether this role sets up the repos to install Ansible from
+# Doesn't do anything on RHEL 8.6+
 ansible_controller_setup_repos: true
 
 # Git Repository to retrieve Ansible utils from

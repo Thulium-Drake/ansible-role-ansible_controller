@@ -1,11 +1,14 @@
 ---
-- name: 'Ensure Ansible signing key'
-  rpm_key:
-    state: 'present'
-    key: "{{ rhel_ansible_controller_repo_key }}"
+- name: 'Set up repos on RHEL 8.5 and below'
+  when: ansible_facts['distribution_version'] is version('<=', '8.5')
+  block:
+    - name: 'Ensure Ansible signing key'
+      ansible.builtin.rpm_key:
+        state: 'present'
+        key: "{{ rhel_ansible_controller_repo_key }}"
 
-- name: 'Ensure Ansible repository'
-  yum_repository:
-    baseurl: "{{ rhel_ansible_controller_repo }}"
-    file: 'ansible'
-    state: 'present'
+    - name: 'Ensure Ansible repository'
+      ansible.builtin.yum_repository:
+        baseurl: "{{ rhel_ansible_controller_repo }}"
+        file: 'ansible'
+        state: 'present'

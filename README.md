@@ -12,10 +12,20 @@ It will:
 If you have a proxy, you need to set ```http_proxy_url```, so this role is able to download all dependencies
 from PyPi.
 
+
+## EL7
 For EL7 you need to install GnuPG2.2 in order to fully use all of the tools this role provides. This package can
 be found on https://copr.fedorainfracloud.org/coprs/icon/lfit/package/gnupg22-static/
 
 And you need to enable EPEL on your system for some dependencies.
+
+## EL 8.6+
+In RHEL starting with 8.6 the ansible-core package is now included in the Appstream repository. As this role is
+intented to be used with Ansible Core (which only seems available in RPM format via these Appstream, Ansible Engine
+or Ansible Automation Platform repos), it will not configure any other repositories.
+
+Should you desire to run Ansible Community edition, please install it from PyPi.
+And you still need to enable EPEL on your system for some dependencies.
 
 ## Ansible Projects
 The Controller uses the concept of 'Ansible Projects', these are folders containing everything Ansible

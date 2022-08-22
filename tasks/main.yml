@@ -1,10 +1,10 @@
 ---
 - name: 'Include OS specific vars'
-  include_vars: "{{ ansible_facts['os_family'] }}-{{ ansible_facts['distribution_major_version'] }}.yml"
+  ansible.builtin.include_vars: "{{ ansible_facts['os_family'] }}-{{ ansible_facts['distribution_major_version'] }}.yml"
   no_log: true
 
 - name: 'Ensure supporting tools'
-  package:
+  ansible.builtin.package:
     name:
       - 'git'
       - "{{ ansible_controller_pip_pkg }}"
@@ -16,11 +16,11 @@
       - "{{ ansible_controller_passlib_pkg }}"
 
 - name: 'Ensure repositories'
-  include_tasks: "repos-{{ ansible_facts['os_family'] }}.yml"
+  ansible.builtin.include_tasks: "repos-{{ ansible_facts['os_family'] }}.yml"
   when: ansible_controller_setup_repos
 
 - name: 'Ensure Ansible from Package Manager (Debian-like)'
-  apt:
+  ansible.builtin.apt:
     name: "{{ ansible_controller_ansible_pkg }}"
     state: 'present'
     install_recommends: false
@@ -29,7 +29,7 @@
     - ansible_facts['os_family'] == 'Debian'
 
 - name: 'Ensure Ansible from Package Manager (RHEL-like)'
-  yum:
+  ansible.builtin.yum:
     name: "{{ ansible_controller_ansible_pkg }}"
     state: 'present'
   when:
@@ -37,19 +37,19 @@
     - ansible_facts['os_family'] == 'RedHat'
 
 - name: 'Set environment facts (placeholder)'
-  set_fact:
+  ansible.builtin.set_fact:
     proxy_env:
       empty_var: 'Just_a_placeholder'
 
 - name: 'Set environment facts (http_proxy)'
-  set_fact:
+  ansible.builtin.set_fact:
     proxy_env:
       http_proxy: "{{ http_proxy_url }}"
       https_proxy: "{{ http_proxy_url }}"
   when: http_proxy_url is defined
 
 - name: 'Ensure Ansible from PyPi'
-  pip:
+  ansible.builtin.pip:
     name: "{{ ansible_controller_ansible_pkg }}"
     state: 'present'
     umask: "0022"
@@ -57,7 +57,7 @@
   environment: "{{ proxy_env }}"
 
 - name: 'Ensure extra PiPy tools'
-  pip:
+  ansible.builtin.pip:
     name:
       - 'ansible-merge-vars'
       - 'ara'
@@ -66,17 +66,18 @@
   environment: "{{ proxy_env }}"
 
 - name: 'Ensure useraccount'
-  user:
+  ansible.builtin.user:
     name: 'ansible'
     comment: 'Ansible Runner'
     state: 'present'
 
 - name: 'Ensure directories'
-  file:
+  ansible.builtin.file:
     path: "{{ dir }}"
     state: 'directory'
     owner: 'ansible'
     group: 'ansible'
+    mode: 0750
   loop:
     - '/opt/ansible/projects/'
     - '/opt/ansible/resources/'
@@ -86,7 +87,7 @@
     loop_var: 'dir'
 
 - name: 'Ensure directories'
-  file:
+  ansible.builtin.file:
     path: '/home/ansible/.gnupg/'
     state: 'directory'
     owner: 'ansible'
@@ -94,15 +95,16 @@
     mode: 0700
 
 - name: 'Ensure Ansible utils repo'
-  git:
+  ansible.builtin.git:
     repo: "{{ ansible_controller_utils_repo }}"
     dest: '/opt/ansible/tools/ansible-utils'
+    version: 'master'
     force: true
     umask: '0022'
   environment: "{{ proxy_env }}"
 
 - name: 'Ensure dir symlinks in Ansible Runner home'
-  file:
+  ansible.builtin.file:
     src: "/opt/ansible/{{ dir_link }}"
     dest: "/home/ansible/{{ dir_link }}"
     state: 'link'
@@ -113,7 +115,7 @@
     loop_var: 'dir_link'
 
 - name: 'Ensure tool symlinks'
-  file:
+  ansible.builtin.file:
     src: "/opt/ansible/tools/ansible-utils/{{ tool_link }}"
     dest: "/usr/local/bin/{{ tool_link }}"
     state: 'link'
@@ -126,7 +128,7 @@
     loop_var: 'tool_link'
 
 - name: 'Ensure retrieve_vault.sh'
-  copy:
+  ansible.builtin.copy:
     src: '/opt/ansible/tools/ansible-utils/retrieve_vault.sh'
     dest: '/opt/ansible/vaults/retrieve_vault.sh'
     owner: 'ansible'
@@ -135,14 +137,15 @@
     remote_src: true
 
 - name: 'Ensure GPG agent settings'
-  copy:
+  ansible.builtin.copy:
     src: "gpg-agent.conf"
     dest: '/home/ansible/.gnupg/gpg-agent.conf'
     owner: 'ansible'
     group: 'ansible'
+    mode: 0640
 
 - name: 'Ensure shell settings'
-  blockinfile:
+  ansible.builtin.blockinfile:
     path: '/home/ansible/.bashrc'
     owner: 'ansible'
     group: 'ansible'
@@ -150,7 +153,7 @@
     block: "{{ lookup('file', 'bashrc') }}"
 
 - name: 'Ensure gpgkey cronjob'
-  cron:
+  ansible.builtin.cron:
     name: 'Hourly GPG key check'
     minute: '0'
     user: 'ansible'
