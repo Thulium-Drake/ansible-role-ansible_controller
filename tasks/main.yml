@@ -53,6 +53,7 @@
     name: "{{ ansible_controller_ansible_pkg }}"
     state: 'present'
     umask: "0022"
+    executable: "{{ ansible_controller_pip_exe | default(omit) }}"
   when: ansible_controller_ansible_from_pip
   environment: "{{ proxy_env }}"
 
