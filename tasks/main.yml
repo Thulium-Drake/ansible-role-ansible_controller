@@ -64,6 +64,7 @@
       - 'ara'
     state: 'present'
     umask: "0022"
+    executable: "{{ ansible_controller_pip_exe | default(omit) }}"
   environment: "{{ proxy_env }}"
 
 - name: 'Ensure useraccount'
