@@ -79,7 +79,7 @@
     state: 'directory'
     owner: 'ansible'
     group: 'ansible'
-    mode: 0750
+    mode: '0750'
   loop:
     - '/opt/ansible/projects/'
     - '/opt/ansible/resources/'
@@ -94,7 +94,7 @@
     state: 'directory'
     owner: 'ansible'
     group: 'ansible'
-    mode: 0700
+    mode: '0700'
 
 - name: 'Ensure Ansible utils repo'
   ansible.builtin.git:
@@ -135,7 +135,7 @@
     dest: '/opt/ansible/vaults/retrieve_vault.sh'
     owner: 'ansible'
     group: 'ansible'
-    mode: 0775
+    mode: '0775'
     remote_src: true
 
 - name: 'Ensure GPG agent settings'
@@ -144,7 +144,7 @@
     dest: '/home/ansible/.gnupg/gpg-agent.conf'
     owner: 'ansible'
     group: 'ansible'
-    mode: 0640
+    mode: '0640'
 
 - name: 'Ensure shell settings'
   ansible.builtin.blockinfile:
