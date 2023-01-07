@@ -1,6 +1,6 @@
 ---
 - name: 'Set up repos on RHEL 8.5 and below'
-  when: ansible_facts['distribution_version'] is version('<=', '8.5')
+  when: ansible_facts['distribution_version'] is version('8.5', '<=')
   block:
     - name: 'Ensure Ansible signing key'
       ansible.builtin.rpm_key:
