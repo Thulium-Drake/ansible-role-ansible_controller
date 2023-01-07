@@ -12,8 +12,13 @@
       - "{{ ansible_controller_jmespath_pkg }}"
       - "{{ ansible_controller_gpgagent_pkg }}"
       - "{{ ansible_controller_requests_pkg }}"
+
+- name: 'Ensure supporting tools - non-RHEL'
+  ansible.builtin.package:
+    name:
       - "{{ ansible_controller_netaddr_pkg }}"
       - "{{ ansible_controller_passlib_pkg }}"
+  when: ansible_facts['os_family'] != 'RedHat'
 
 - name: 'Ensure repositories'
   ansible.builtin.include_tasks: "repos-{{ ansible_facts['os_family'] }}.yml"
@@ -47,6 +52,18 @@
       http_proxy: "{{ http_proxy_url }}"
       https_proxy: "{{ http_proxy_url }}"
   when: http_proxy_url is defined
+
+- name: 'Install remaining supporting tools from PyPi (RHEL)'
+  ansible.builtin.pip:
+    name:
+      - 'netaddr'
+      - 'passlib'
+    state: 'present'
+    umask: "0022"
+    executable: "{{ ansible_controller_pip_exe | default(omit) }}"
+  when:
+    - ansible_facts['os_family'] == 'RedHat'
+  environment: "{{ proxy_env }}"
 
 - name: 'Ensure Ansible from PyPi'
   ansible.builtin.pip:
