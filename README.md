@@ -25,7 +25,10 @@ intented to be used with Ansible Core (which only seems available in RPM format 
 or Ansible Automation Platform repos), it will not configure any other repositories.
 
 Should you desire to run Ansible Community edition, please install it from PyPi.
-And you still need to enable EPEL on your system for some dependencies.
+And you still need to enable EPEL on your system for the following dependencies:
+
+* python39-jmespath
+* python39-netaddr
 
 ## Ansible Projects
 The Controller uses the concept of 'Ansible Projects', these are folders containing everything Ansible
