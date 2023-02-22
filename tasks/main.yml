@@ -7,6 +7,7 @@
   ansible.builtin.package:
     name:
       - 'git'
+      - 'pwgen'
       - "{{ ansible_controller_pip_pkg }}"
       - "{{ ansible_controller_cryptography_pkg }}"
       - "{{ ansible_controller_jmespath_pkg }}"
@@ -119,6 +120,8 @@
     version: 'master'
     force: true
     umask: '0022'
+    owner: 'ansible'
+    group: 'ansible'
   environment: "{{ proxy_env }}"
 
 - name: 'Ensure dir symlinks in Ansible Runner home'
