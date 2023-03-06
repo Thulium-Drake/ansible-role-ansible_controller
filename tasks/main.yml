@@ -120,8 +120,6 @@
     version: 'master'
     force: true
     umask: '0022'
-    owner: 'ansible'
-    group: 'ansible'
   environment: "{{ proxy_env }}"
 
 - name: 'Ensure dir symlinks in Ansible Runner home'
