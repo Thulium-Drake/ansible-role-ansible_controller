@@ -9,6 +9,9 @@ ansible_controller_ansible_from_pip: false
 # Doesn't do anything on RHEL 8.6+
 ansible_controller_setup_repos: true
 
+# Set up Ansible Utils, this can be disabled to ease installation without Internet access.
+ansible_controller_utils_enabled: true
+
 # Git Repository to retrieve Ansible utils from
 ansible_controller_utils_repo: 'https://github.com/Thulium-Drake/ansible-utils'
 

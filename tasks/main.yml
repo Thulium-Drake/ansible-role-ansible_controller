@@ -113,47 +113,57 @@
     group: 'ansible'
     mode: '0700'
 
-- name: 'Ensure Ansible utils repo'
-  ansible.builtin.git:
-    repo: "{{ ansible_controller_utils_repo }}"
-    dest: '/opt/ansible/tools/ansible-utils'
-    version: 'master'
-    force: true
-    umask: '0022'
-  environment: "{{ proxy_env }}"
+- name: 'Set up Ansible Utils'
+  when: ansible_controller_utils_enabled
+  block:
+    - name: 'Ensure Ansible utils repo'
+      ansible.builtin.git:
+        repo: "{{ ansible_controller_utils_repo }}"
+        dest: '/opt/ansible/tools/ansible-utils'
+        version: 'master'
+        force: true
+        umask: '0022'
+      environment: "{{ proxy_env }}"
 
-- name: 'Ensure dir symlinks in Ansible Runner home'
-  ansible.builtin.file:
-    src: "/opt/ansible/{{ dir_link }}"
-    dest: "/home/ansible/{{ dir_link }}"
-    state: 'link'
-  loop:
-    - 'projects'
-    - 'resources'
-  loop_control:
-    loop_var: 'dir_link'
+    - name: 'Ensure dir symlinks in Ansible Runner home'
+      ansible.builtin.file:
+        src: "/opt/ansible/{{ dir_link }}"
+        dest: "/home/ansible/{{ dir_link }}"
+        state: 'link'
+      loop:
+        - 'projects'
+        - 'resources'
+      loop_control:
+        loop_var: 'dir_link'
 
-- name: 'Ensure tool symlinks'
-  ansible.builtin.file:
-    src: "/opt/ansible/tools/ansible-utils/{{ tool_link }}"
-    dest: "/usr/local/bin/{{ tool_link }}"
-    state: 'link'
-  loop:
-    - 'encryptansible'
-    - 'runansible'
-    - 'showansible'
-    - 'gpgkey'
-  loop_control:
-    loop_var: 'tool_link'
+    - name: 'Ensure tool symlinks'
+      ansible.builtin.file:
+        src: "/opt/ansible/tools/ansible-utils/{{ tool_link }}"
+        dest: "/usr/local/bin/{{ tool_link }}"
+        state: 'link'
+      loop:
+        - 'encryptansible'
+        - 'runansible'
+        - 'showansible'
+        - 'gpgkey'
+      loop_control:
+        loop_var: 'tool_link'
 
-- name: 'Ensure retrieve_vault.sh'
-  ansible.builtin.copy:
-    src: '/opt/ansible/tools/ansible-utils/retrieve_vault.sh'
-    dest: '/opt/ansible/vaults/retrieve_vault.sh'
-    owner: 'ansible'
-    group: 'ansible'
-    mode: '0775'
-    remote_src: true
+    - name: 'Ensure retrieve_vault.sh'
+      ansible.builtin.copy:
+        src: '/opt/ansible/tools/ansible-utils/retrieve_vault.sh'
+        dest: '/opt/ansible/vaults/retrieve_vault.sh'
+        owner: 'ansible'
+        group: 'ansible'
+        mode: '0775'
+        remote_src: true
+
+    - name: 'Ensure gpgkey cronjob'
+      ansible.builtin.cron:
+        name: 'Hourly GPG key check'
+        minute: '0'
+        user: 'ansible'
+        job: '/usr/local/bin/gpgkey -c'
 
 - name: 'Ensure GPG agent settings'
   ansible.builtin.copy:
@@ -170,10 +180,3 @@
     group: 'ansible'
     marker: '# {mark} ANSIBLE-CONTROLLER ROLE MANAGED BLOCK'
     block: "{{ lookup('file', 'bashrc') }}"
-
-- name: 'Ensure gpgkey cronjob'
-  ansible.builtin.cron:
-    name: 'Hourly GPG key check'
-    minute: '0'
-    user: 'ansible'
-    job: '/usr/local/bin/gpgkey -c'
