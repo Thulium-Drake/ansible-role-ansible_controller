@@ -5,15 +5,15 @@
     - name: 'Prepare Debian'
       block:
         - name: 'Update APT cache'
-          apt:
+          ansible.builtin.apt:
             update_cache: true
           when: ansible_facts['os_family'] == 'Debian'
         - name: 'Install cron'
-          apt:
+          ansible.builtin.apt:
             name: 'cron'
             state: 'present'
 
     - name: 'Update YUM cache'
-      yum:
+      ansible.builtin.yum:
         update_cache: true
       when: ansible_facts['os_family'] == 'RedHat'

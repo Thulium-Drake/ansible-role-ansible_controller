@@ -9,6 +9,7 @@
 
     - name: 'Ensure Ansible repository'
       ansible.builtin.yum_repository:
+        name: 'ansible'
         baseurl: "{{ rhel_ansible_controller_repo }}"
         file: 'ansible'
         state: 'present'
