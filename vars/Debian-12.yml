@@ -1,0 +1,9 @@
+---
+ansible_controller_gpgagent_pkg: 'gpg-agent'
+ansible_controller_pip_pkg: 'pipx'
+ansible_controller_pip_method: 'pipx'
+ansible_controller_cryptography_pkg: 'python3-cryptography'
+ansible_controller_requests_pkg: 'python3-requests'
+ansible_controller_jmespath_pkg: 'python3-jmespath'
+ansible_controller_netaddr_pkg: 'python3-netaddr'
+ansible_controller_passlib_pkg: 'python3-passlib'

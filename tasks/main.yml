@@ -72,24 +72,13 @@
     - ansible_facts['os_family'] == 'RedHat'
   environment: "{{ proxy_env }}"
 
-- name: 'Ensure Ansible from PyPi'
-  ansible.builtin.pip:
-    name: "{{ ansible_controller_ansible_pkg }}"
-    state: 'present'
-    umask: "0022"
-    executable: "{{ ansible_controller_pip_exe | default(omit) }}"
-  when: ansible_controller_ansible_from_pip
-  environment: "{{ proxy_env }}"
+- name: 'Include tasks when installing with PyPi (RHEL)'
+  ansible.builtin.include_tasks: "install-{{ ansible_controller_pip_method }}.yml"
+  when: ansible_facts['os_family'] == 'RedHat'
 
-- name: 'Ensure extra PiPy tools'
-  ansible.builtin.pip:
-    name:
-      - 'ansible-merge-vars'
-      - 'ara'
-    state: 'present'
-    umask: "0022"
-    executable: "{{ ansible_controller_pip_exe | default(omit) }}"
-  environment: "{{ proxy_env }}"
+- name: 'Include tasks when installing with PyPi (Debian)'
+  ansible.builtin.include_tasks: "install-{{ ansible_controller_pip_method }}.yml"
+  when: ansible_facts['distribution'] == 'Debian'
 
 - name: 'Ensure useraccount'
   ansible.builtin.user:

@@ -1,0 +1,30 @@
+---
+- name: 'Ensure Ansible from PyPi'
+  ansible.builtin.pip:
+    name: "{{ ansible_controller_ansible_pkg }}"
+    state: 'present'
+    umask: "0022"
+    executable: "{{ ansible_controller_pip_exe | default(omit) }}"
+  when: ansible_controller_ansible_from_pip
+  environment: "{{ proxy_env }}"
+
+- name: 'Ensure extra PiPy tools'
+  ansible.builtin.pip:
+    name:
+      - 'ansible-merge-vars'
+      - 'ara'
+    state: 'present'
+    umask: "0022"
+    executable: "{{ ansible_controller_pip_exe | default(omit) }}"
+  environment: "{{ proxy_env }}"
+
+- name: 'Install remaining supporting tools from PyPi (RHEL)'
+  ansible.builtin.pip:
+    name:
+      - 'passlib'
+    state: 'present'
+    umask: "0022"
+    executable: "{{ ansible_controller_pip_exe | default(omit) }}"
+  when:
+    - ansible_facts['os_family'] == 'RedHat'
+  environment: "{{ proxy_env }}"
