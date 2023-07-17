@@ -13,8 +13,9 @@
     inject_packages:
       - 'ansible-merge-vars'
       - 'ara'
-      - 'passlib'
       - 'dnspython'
+      - 'netaddr'
+      - 'passlib'
     state: 'inject'
   when: ansible_controller_ansible_from_pip
   environment: "{{ proxy_env }}"
