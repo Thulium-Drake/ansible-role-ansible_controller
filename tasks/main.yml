@@ -86,6 +86,16 @@
     comment: 'Ansible Runner'
     state: 'present'
 
+- name: 'Check linger for useraccount'
+  ansible.builtin.command: loginctl show-user ansible -p Linger
+  register: 'ansible_controller_linger'
+  changed_when: false
+
+- name: 'Ensure linger enabled for useraccount'
+  ansible.builtin.command: loginctl enable-linger ansible
+  when: "'Linger=no' in ansible_controller_linger['stdout']"
+  changed_when: true
+
 - name: 'Ensure directories'
   ansible.builtin.file:
     path: "{{ dir }}"
