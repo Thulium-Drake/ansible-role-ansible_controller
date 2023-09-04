@@ -90,10 +90,13 @@
   ansible.builtin.command: loginctl show-user ansible -p Linger
   register: 'ansible_controller_linger'
   changed_when: false
+  when: not _ansible_controller_molecule | default(false) | bool
 
 - name: 'Ensure linger enabled for useraccount'
   ansible.builtin.command: loginctl enable-linger ansible
-  when: "'Linger=no' in ansible_controller_linger['stdout']"
+  when:
+    - not _ansible_controller_molecule | default(false) | bool
+    - "'Linger=no' in ansible_controller_linger['stdout']"
   changed_when: true
 
 - name: 'Ensure directories'
