@@ -65,6 +65,7 @@
   ansible.builtin.pip:
     name:
       - 'passlib'
+      - 'dnspython'
     state: 'present'
     umask: "0022"
     executable: "{{ ansible_controller_pip_exe | default(omit) }}"
