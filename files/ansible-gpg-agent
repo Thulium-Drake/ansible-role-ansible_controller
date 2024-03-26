@@ -1,0 +1,8 @@
+/var/log/ansible-gpg-agent.log {
+    daily
+    missingok
+    notifempty
+    rotate 2
+    compress
+    delaycompress
+}

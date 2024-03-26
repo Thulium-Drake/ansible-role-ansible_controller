@@ -1,0 +1,5 @@
+---
+- name: 'Restart logrotate'
+  ansible.builtin.service:
+    name: 'logrotate'
+    state: 'restarted'

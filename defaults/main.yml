@@ -15,6 +15,9 @@ ansible_controller_utils_enabled: true
 # Git Repository to retrieve Ansible utils from
 ansible_controller_utils_repo: 'https://github.com/Thulium-Drake/ansible-utils'
 
+# Enable to extensively log GPG agent in order to debug issues with gpg-agent
+ansible_controller_gpg_debug: false
+
 ###
 # Debian
 ###

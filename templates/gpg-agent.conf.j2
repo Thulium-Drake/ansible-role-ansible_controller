@@ -1,0 +1,13 @@
+# This file is managed by Ansible, your changes will be lost!
+default-cache-ttl 34560000
+max-cache-ttl 34560000
+enable-ssh-support
+daemon
+allow-preset-passphrase
+
+{% if ansible_controller_gpg_debug %}
+# NOTE: Debugging is enabled, the logfile can become very large!
+verbose
+debug-level guru
+log-file /var/log/ansible-gpg-agent.log
+{% endif %}
