@@ -177,8 +177,8 @@
         job: '/usr/local/bin/gpgkey -c'
 
 - name: 'Ensure GPG agent settings'
-  ansible.builtin.copy:
-    src: "gpg-agent.conf"
+  ansible.builtin.template:
+    src: 'gpg-agent.conf.j2'
     dest: '/home/ansible/.gnupg/gpg-agent.conf'
     owner: 'ansible'
     group: 'ansible'
