@@ -201,6 +201,7 @@
         owner: 'ansible'
         group: 'ansible'
         mode: '0640'
+        state: 'touch'
 
     - name: 'Configure logrotate for GPG debug log'
       ansible.builtin.copy:
