@@ -3,3 +3,10 @@ gpgconf --launch gpg-agent
 gpg-connect-agent updatestartuptty /bye >/dev/null 2>&1
 
 export XDG_RUNTIME_DIR=/run/user/$(id -u)
+
+# List all SystemD timers starting with ansible_
+function list-timers() {
+  echo "        NEXT RUN                       JOB NAME"
+  systemctl --user show ansible_*.timer --property Description,NextElapseUSecRealtime --value --no-pager | grep . | paste -d' ' - -
+| sort -k2
+}
