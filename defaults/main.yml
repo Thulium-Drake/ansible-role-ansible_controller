@@ -12,6 +12,9 @@ ansible_controller_setup_repos: true
 # Set up Ansible Utils, this can be disabled to ease installation without Internet access.
 ansible_controller_utils_enabled: true
 
+# Install the Bitwarden CLI
+ansible_controller_utils_bitwarden: true
+
 # Git Repository to retrieve Ansible utils from
 ansible_controller_utils_repo: 'https://github.com/Thulium-Drake/ansible-utils'
 

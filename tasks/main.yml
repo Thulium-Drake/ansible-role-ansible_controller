@@ -184,6 +184,7 @@
         owner: 'root'
         group: 'root'
         mode: '0755'
+      when: ansible_controller_utils_bitwarden | bool
 
 - name: 'Ensure GPG agent settings'
   ansible.builtin.template:
