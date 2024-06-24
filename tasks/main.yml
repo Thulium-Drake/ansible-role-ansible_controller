@@ -176,6 +176,15 @@
         user: 'ansible'
         job: '/usr/local/bin/gpgkey -c'
 
+    - name: 'Ensure Bitwarden CLI tool'
+      ansible.builtin.unarchive:
+        src: 'https://vault.bitwarden.com/download/?app=cli&platform=linux'
+        remote_src: true
+        dest: '/usr/local/bin'
+        owner: 'root'
+        group: 'root'
+        mode: '0755'
+
 - name: 'Ensure GPG agent settings'
   ansible.builtin.template:
     src: 'gpg-agent.conf.j2'
