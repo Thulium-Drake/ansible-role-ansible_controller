@@ -1,6 +1,6 @@
 ---
 # yamllint disable rule:line-length
-ansible_controller_python_version: "{{ ansible_facts['python']['version']['major'] }}{{ (ansible_facts['python']['version']['major'] | int > 10) | ternary('.', '') }}{{ ansible_facts['python']['version']['minor'] }}"
+ansible_controller_python_version: "{{ ansible_facts['python']['version']['major'] }}{{ (ansible_facts['python']['version']['minor'] | int >= 10) | ternary('.', '') }}{{ ansible_facts['python']['version']['minor'] }}"
 ansible_controller_gpgagent_pkg: 'gnupg2'
 ansible_controller_pip_exe: ''  # Autodetect
 ansible_controller_pip_pkg: "python{{ ansible_controller_python_version }}-pip"
