@@ -44,6 +44,8 @@
   ansible.builtin.shell: |
     set -o pipefail
     ansible --version | grep 'python version' | cut -d= -f2 | awk '{print $1}'
+  args:
+    executable: '/bin/bash'
   register: 'ansible_controller_python_version_raw'
   changed_when: false
 
