@@ -5,7 +5,7 @@ driver:
   name: ${DRIVER_NAME:-docker}
 platforms:
   - name: "ansible"
-    image: "geerlingguy/docker-${MOLECULE_DISTRO:-debian10}-ansible:latest"
+    image: "git.element-networks.nl/containers/${MOLECULE_DISTRO:-rockylinux8}-ansible:latest"
     command: '/lib/systemd/systemd'
     pre_build_image: true
     volumes:
