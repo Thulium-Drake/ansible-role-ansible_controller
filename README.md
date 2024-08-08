@@ -24,7 +24,15 @@ And you still need to enable EPEL on your system for the following dependencies:
 * python<version>-jmespath
 * pytho<version>-netaddr
 
-This role tries to autodetect the version on Ansible used to install the corresponding Python Packages. However, when using this role to remotely provision a new Ansible Controller, please set ```ansible_python_interpreter``` to the version appropriate for the version of Ansible available to you.
+## Ansible additional Python versioned dependencies
+This role tries to autodetect the version on Ansible used to install the corresponding Python Packages. However, if it isn't able to detect the proper version of Python Ansible uses (e.g. when you have multiple versions installed from Pip), please set ```ansible_controller_python_version``` manually:
+
+```
+ansible_controller_python_version:
+  major: 3
+  minor: 12
+  micro: 1
+```
 
 ## Ansible Projects
 The Controller uses the concept of 'Ansible Projects', these are folders containing everything Ansible

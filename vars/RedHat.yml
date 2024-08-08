@@ -1,12 +1,12 @@
 ---
 # yamllint disable rule:line-length
-ansible_controller_python_version: "{{ ansible_facts['python']['version']['major'] }}{{ (ansible_facts['python']['version']['minor'] | int >= 10) | ternary('.', '') }}{{ ansible_facts['python']['version']['minor'] }}"
+ansible_controller_python_package_version: "{{ ansible_controller_python_version['major'] }}{{ (ansible_controller_python_version['minor'] | int >= 10) | ternary('.', '') }}{{ ansible_controller_python_version['minor'] }}"
 ansible_controller_gpgagent_pkg: 'gnupg2'
 ansible_controller_pip_exe: ''  # Autodetect
-ansible_controller_pip_pkg: "python{{ ansible_controller_python_version }}-pip"
+ansible_controller_pip_pkg: "python{{ ansible_controller_python_package_version }}-pip"
 ansible_controller_pip_method: 'pip'
-ansible_controller_cryptography_pkg: "python{{ ansible_controller_python_version }}-cryptography"
-ansible_controller_requests_pkg: "python{{ ansible_controller_python_version }}-requests"
-ansible_controller_jmespath_pkg: "python{{ ansible_controller_python_version }}-jmespath"
-ansible_controller_netaddr_pkg: "python{{ ansible_controller_python_version }}-netaddr"
+ansible_controller_cryptography_pkg: "python{{ ansible_controller_python_package_version }}-cryptography"
+ansible_controller_requests_pkg: "python{{ ansible_controller_python_package_version }}-requests"
+ansible_controller_jmespath_pkg: "python{{ ansible_controller_python_package_version }}-jmespath"
+ansible_controller_netaddr_pkg: "python{{ ansible_controller_python_package_version }}-netaddr"
 ansible_controller_passlib_pkg: ''  # Not available

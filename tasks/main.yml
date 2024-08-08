@@ -9,6 +9,56 @@
       paths:
         - 'vars'
 
+- name: 'Ensure repositories'
+  ansible.builtin.include_tasks: "repos-{{ ansible_facts['os_family'] }}.yml"
+  when: ansible_controller_setup_repos
+
+- name: 'Ensure Ansible from Package Manager'
+  when: not ansible_controller_ansible_from_pip
+  block:
+    - name: 'Ensure Ansible from Package Manager (Debian-like)'
+      ansible.builtin.apt:
+        name: "{{ ansible_controller_ansible_pkg }}"
+        state: 'present'
+        install_recommends: false
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: 'Ensure Ansible from Package Manager (RHEL-like)'
+      ansible.builtin.yum:
+        name: "{{ ansible_controller_ansible_pkg }}"
+        state: 'present'
+      when: ansible_facts['os_family'] == 'RedHat'
+
+- name: 'Ensure Ansible from Package Manager'
+  when: ansible_controller_ansible_from_pip
+  block:
+    - name: 'Include tasks when installing with PyPi (RHEL)'
+      ansible.builtin.include_tasks: "install-{{ ansible_controller_pip_method }}.yml"
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: 'Include tasks when installing with PyPi (Debian)'
+      ansible.builtin.include_tasks: "install-{{ ansible_controller_pip_method }}.yml"
+      when: ansible_facts['distribution'] == 'Debian'
+
+- name: 'Collect Ansible Python version'
+  ansible.builtin.shell: |
+    set -o pipefail
+    ansible --version | grep 'python version' | cut -d= -f2 | awk '{print $1}'
+  register: 'ansible_controller_python_version_raw'
+  changed_when: false
+
+- name: 'Generate variables with Python version'
+  ansible.builtin.set_fact:
+    ansible_controller_python_version_list: "{{ ansible_controller_python_version_raw['stdout'] | split('.') }}"
+
+- name: 'Generate variables with Python version'
+  ansible.builtin.set_fact:
+    ansible_controller_python_version:
+      major: "{{ ansible_controller_python_version_list[0] }}"
+      minor: "{{ ansible_controller_python_version_list[1] }}"
+      micro: "{{ ansible_controller_python_version_list[2] }}"
+  when: ansible_controller_python_version is undefined
+
 - name: 'Ensure supporting tools'
   ansible.builtin.package:
     name:
@@ -28,27 +78,6 @@
     name:
       - "{{ ansible_controller_passlib_pkg }}"
   when: ansible_facts['os_family'] != 'RedHat'
-
-- name: 'Ensure repositories'
-  ansible.builtin.include_tasks: "repos-{{ ansible_facts['os_family'] }}.yml"
-  when: ansible_controller_setup_repos
-
-- name: 'Ensure Ansible from Package Manager (Debian-like)'
-  ansible.builtin.apt:
-    name: "{{ ansible_controller_ansible_pkg }}"
-    state: 'present'
-    install_recommends: false
-  when:
-    - not ansible_controller_ansible_from_pip
-    - ansible_facts['os_family'] == 'Debian'
-
-- name: 'Ensure Ansible from Package Manager (RHEL-like)'
-  ansible.builtin.yum:
-    name: "{{ ansible_controller_ansible_pkg }}"
-    state: 'present'
-  when:
-    - not ansible_controller_ansible_from_pip
-    - ansible_facts['os_family'] == 'RedHat'
 
 - name: 'Set environment facts (placeholder)'
   ansible.builtin.set_fact:
@@ -73,14 +102,6 @@
   when:
     - ansible_facts['os_family'] == 'RedHat'
   environment: "{{ proxy_env }}"
-
-- name: 'Include tasks when installing with PyPi (RHEL)'
-  ansible.builtin.include_tasks: "install-{{ ansible_controller_pip_method }}.yml"
-  when: ansible_facts['os_family'] == 'RedHat'
-
-- name: 'Include tasks when installing with PyPi (Debian)'
-  ansible.builtin.include_tasks: "install-{{ ansible_controller_pip_method }}.yml"
-  when: ansible_facts['distribution'] == 'Debian'
 
 - name: 'Ensure useraccount'
   ansible.builtin.user:
