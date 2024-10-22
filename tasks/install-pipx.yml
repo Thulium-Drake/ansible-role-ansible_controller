@@ -4,7 +4,7 @@
     name: "{{ ansible_controller_ansible_pkg }}"
     state: 'present'
   when: ansible_controller_ansible_from_pip
-  environment: "{{ proxy_env }}"
+  environment: "{{ ansible_controller_env }}"
   become: false
 
 - name: 'Ensure Ansible from PyPi'
@@ -18,5 +18,5 @@
       - 'passlib'
     state: 'inject'
   when: ansible_controller_ansible_from_pip
-  environment: "{{ proxy_env }}"
+  environment: "{{ ansible_controller_env }}"
   become: false

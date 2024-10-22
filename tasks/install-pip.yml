@@ -6,7 +6,7 @@
     umask: "0022"
     executable: "{{ ansible_controller_pip_exe | default(omit, true) }}"
   when: ansible_controller_ansible_from_pip
-  environment: "{{ proxy_env }}"
+  environment: "{{ ansible_controller_env }}"
 
 - name: 'Ensure extra PiPy tools'
   ansible.builtin.pip:
@@ -16,7 +16,7 @@
     state: 'present'
     umask: "0022"
     executable: "{{ ansible_controller_pip_exe | default(omit, true) }}"
-  environment: "{{ proxy_env }}"
+  environment: "{{ ansible_controller_env }}"
 
 - name: 'Install remaining supporting tools from PyPi (RHEL)'
   ansible.builtin.pip:
@@ -27,4 +27,4 @@
     executable: "{{ ansible_controller_pip_exe | default(omit, true) }}"
   when:
     - ansible_facts['os_family'] == 'RedHat'
-  environment: "{{ proxy_env }}"
+  environment: "{{ ansible_controller_env }}"
