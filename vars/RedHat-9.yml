@@ -3,7 +3,7 @@
 # If python version is lower then 3.10 the package name is python3-x, else it's python3.11-x
 ansible_controller_python_package_version: "{{ ansible_controller_python_version['major'] }}{{ (ansible_controller_python_version['minor'] | int >= 10) | ternary('.' + ansible_controller_python_version['minor'] | string, '') }}"
 ansible_controller_gpgagent_pkg: 'gnupg2'
-ansible_controller_pip_exe: ''  # Autodetect
+ansible_controller_pip_exe: "pip-{{ ansible_controller_python_package_version }}"
 ansible_controller_pip_pkg: "python{{ ansible_controller_python_package_version }}-pip"
 ansible_controller_pip_method: 'pip'
 ansible_controller_cryptography_pkg: "python{{ ansible_controller_python_package_version }}-cryptography"
