@@ -101,6 +101,7 @@
     name:
       - 'passlib'
       - 'dnspython'
+      - 'ara'
     state: 'present'
     umask: "0022"
     executable: "{{ ansible_controller_pip_exe | default(omit, true) }}"
