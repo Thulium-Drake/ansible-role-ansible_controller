@@ -14,6 +14,8 @@ ansible_controller_utils_enabled: true
 
 # Install the Bitwarden CLI
 ansible_controller_utils_bitwarden: true
+# Path to extra CA certificates, in case the CA is not trusted by the bw cli by default
+ansible_controller_bitwarden_extra_ca: ''
 
 # Git Repository to retrieve Ansible utils from
 ansible_controller_utils_repo: 'https://github.com/Thulium-Drake/ansible-utils'

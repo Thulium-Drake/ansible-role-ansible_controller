@@ -213,6 +213,17 @@
         mode: '0755'
       when: ansible_controller_utils_bitwarden | bool
 
+    - name: 'Ensure Bitwarden extra CA certificates'
+      ansible.builtin.copy:
+        content: |
+          # This file is managed by Ansible, YOUR CHANGES WILL BE LOST!
+          export NODE_EXTRA_CA_CERTS={{ ansible_controller_bitwarden_extra_ca }}
+        dest: '/etc/profile.d/node_extra_ca.sh'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+      when: ansible_controller_bitwarden_extra_ca | length > 0
+
 - name: 'Ensure GPG agent settings'
   ansible.builtin.template:
     src: 'gpg-agent.conf.j2'
