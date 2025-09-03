@@ -83,6 +83,7 @@
       - 'jq'
       - 'pwgen'
       - 'unzip'
+      - 'pinentry-tty'
       - "{{ ansible_controller_pip_pkg }}"
       - "{{ ansible_controller_cryptography_pkg }}"
       - "{{ ansible_controller_jmespath_pkg }}"

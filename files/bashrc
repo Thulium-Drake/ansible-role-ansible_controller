@@ -3,6 +3,7 @@ gpgconf --launch gpg-agent
 gpg-connect-agent updatestartuptty /bye >/dev/null 2>&1
 
 export XDG_RUNTIME_DIR=/run/user/$(id -u)
+export GPG_TTY=$(tty)
 
 # List all SystemD timers starting with ansible_
 function list-timers() {
