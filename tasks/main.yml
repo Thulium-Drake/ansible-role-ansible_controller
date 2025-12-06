@@ -6,7 +6,6 @@
       files:
         - "{{ ansible_facts['os_family'] }}-{{ ansible_facts['distribution_major_version'] }}.yml"
         - "{{ ansible_facts['os_family'] }}.yml"
-        - 'main.yml'
       paths:
         - 'vars'
 
