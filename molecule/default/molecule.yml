@@ -2,7 +2,7 @@
 dependency:
   name: 'galaxy'
 driver:
-  name: ${DRIVER_NAME:-docker}
+  name: ${DRIVER_NAME:-podman}
 platforms:
   - name: "ansible"
     image: "git.element-networks.nl/containers/${MOLECULE_DISTRO:-rockylinux8}-ansible:latest"
