@@ -1,7 +1,14 @@
 ---
-- name: 'Ensure Ansible signing key'
-  ansible.builtin.apt_key:
+- name: 'Configure APT Ansible repo key'
+  ansible.builtin.uri:
     url: "{{ deb_ansible_controller_repo_key }}"
+    dest: '/etc/apt/keyrings/ansible.asc'
+    status_code:
+      - 200
+      - 304
+  environment:
+    http_proxy: "{{ apt_proxy_url | default(omit) }}"
+    https_proxy: "{{ apt_proxy_url | default(omit) }}"
 
 - name: 'Ensure Ansible repository'
   ansible.builtin.apt_repository:
