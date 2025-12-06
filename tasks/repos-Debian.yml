@@ -16,7 +16,7 @@
       # This file is managed by Ansible.
       # YOUR CHANGES WILL BE LOST!
       Types: deb
-      URIs: {{ deb_ansible_controller_repo }}
+      URIs: {{ deb_ansible_controller_repo_baseurl }}
       Suites: {{ deb_ansible_controller_repo_suite }}
       Components: {{ deb_ansible_controller_repo_components }}
       Signed-By: /etc/apt/keyrings/ansible.asc
