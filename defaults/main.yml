@@ -27,7 +27,9 @@ ansible_controller_gpg_debug: false
 # Debian
 ###
 # URL of the Ansible repository to use
-deb_ansible_controller_repo: 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu bionic main'
+deb_ansible_controller_repo_baseurl: 'http://ppa.launchpad.net/ansible/ansible/ubuntu'
+deb_ansible_controller_repo_suite: 'plucky'
+deb_ansible_controller_repo_components: 'main'
 
 # URL where the signing key of the above repo can be found
 deb_ansible_controller_repo_key: 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x6125e2a8c77f2818fb7bd15b93c4a3fd7bb9c367'
