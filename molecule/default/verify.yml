@@ -1,0 +1,31 @@
+---
+- name: 'Verify'
+  hosts: 'all'
+  gather_facts: false
+  become: false
+  check_mode: true
+  tasks:
+    - name: 'Collect PipX environment'
+      community.general.pipx_info:
+      register: 'ansible_controller_pipx_info'
+
+    - name: 'Validate PipX Ansible toolchain'
+      ansible.builtin.assert:
+        that:
+          - ansible_controller_version in (ansible_controller_pipx_info['application'] | map(attribute='name') | list)
+          - >
+            (
+              ansible_controller_pipx_info['application']
+              | selectattr('name', 'equalto', ansible_controller_version)
+              | first
+            )['version'] is defined
+        fail_msg: 'One or more of the desired Ansible versions are not present'
+        success_msg: 'All the desired Ansible versions are present'
+      loop:
+        - 'ansible-core-2-16'
+        - 'ansible-core-2-18'
+        - 'ansible-core-2-20'
+        - 'ansible-lint'
+        - 'molecule'
+      loop_control:
+        loop_var: 'ansible_controller_version'

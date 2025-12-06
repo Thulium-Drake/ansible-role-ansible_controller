@@ -1,16 +1,10 @@
 ---
-# Ansible package
-ansible_controller_ansible_pkg: 'ansible-core'
-
-# Install Ansible from PyPi or package manager
-ansible_controller_ansible_from_pip: false
-
-# Controls whether this role sets up the repos to install Ansible from
-# Doesn't do anything on RHEL 8.6+
-ansible_controller_setup_repos: true
-
-# Set up Ansible Utils, this can be disabled to ease installation without Internet access.
-ansible_controller_utils_enabled: true
+# Versions of Ansible to configure with pipx
+# NOTE: the last version on the list will provide the 'unversioned' Ansible commands
+ansible_controller_versions:
+  - '2.18'
+  - '2.20'
+  - '2.16'  # This version will provide the unversioned Ansible commands
 
 # Install the Bitwarden CLI
 ansible_controller_utils_bitwarden: true
@@ -22,23 +16,3 @@ ansible_controller_utils_repo: 'https://github.com/Thulium-Drake/ansible-utils'
 
 # Enable to extensively log GPG agent in order to debug issues with gpg-agent
 ansible_controller_gpg_debug: false
-
-###
-# Debian
-###
-# URL of the Ansible repository to use
-deb_ansible_controller_repo_baseurl: 'http://ppa.launchpad.net/ansible/ansible/ubuntu'
-deb_ansible_controller_repo_suite: 'plucky'
-deb_ansible_controller_repo_components: 'main'
-
-# URL where the signing key of the above repo can be found
-deb_ansible_controller_repo_key: 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x6125e2a8c77f2818fb7bd15b93c4a3fd7bb9c367'
-
-###
-# RedHat
-###
-# URL of the Ansible repository to use
-rhel_ansible_controller_repo: 'https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/'
-
-# URL where the signing key of the above repo can be found
-rhel_ansible_controller_repo_key: 'https://releases.ansible.com/keys/RPM-GPG-KEY-ansible-release.pub'

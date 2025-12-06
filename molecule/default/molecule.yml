@@ -16,5 +16,7 @@ provisioner:
   config_options:
     defaults:
       roles_path: "$MOLECULE_PROJECT_DIRECTORY/.."
+  env:
+    ANSIBLE_VERBOSITY: 2
 verifier:
   name: 'ansible'

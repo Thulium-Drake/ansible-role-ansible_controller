@@ -2,7 +2,8 @@
 - name: 'Converge'
   hosts: 'all'
   vars:
-    _ansible_controller_molecule: true
+    ansible_user: 'root'  # Molecule does not provide this variable, where Ansible normally does
+    _ansible_controller_molecule: true  # Systemd is not fully running. so we cannot check linger
   tasks:
     - name: 'Run role'
       ansible.builtin.include_role:

@@ -1,38 +1,14 @@
-[![Build Status](https://drone.element-networks.nl/api/badges/Ansible/role-ansible_controller/status.svg)](https://drone.element-networks.nl/Ansible/role-ansible_controller)
 # Controller setup
 This role sets up a system with a dedicated Ansible user for use as a Ansible Control Node.
 
 It will:
-* Enable Ansible repository
-* Install ansible, ansible-merge-vars, ARA client
 * Download the Ansible Utils repository to your system (https://github.com/thulium-drake/ansible-utils)
-* Create a new user
+* Set up the current useraccount used for Ansible
+* Ensure Ansible toolchain set up within PipX with a script from the Ansible Utils repo
 * Setup GPG agent for this user (Add your own GPG key, see below)
 
 If you have a proxy, you need to set ```http_proxy_url```, so this role is able to download all dependencies
 from PyPi.
-
-
-## EL 8.6+
-In RHEL starting with 8.6 the ansible-core package is now included in the Appstream repository. As this role is
-intented to be used with Ansible Core (which only seems available in RPM format via these Appstream, Ansible Engine
-or Ansible Automation Platform repos), it will not configure any other repositories.
-
-Should you desire to run Ansible Community edition, please install it from PyPi.
-And you still need to enable EPEL on your system for the following dependencies:
-
-* python<version>-jmespath
-* pytho<version>-netaddr
-
-## Ansible additional Python versioned dependencies
-This role tries to autodetect the version on Ansible used to install the corresponding Python Packages. However, if it isn't able to detect the proper version of Python Ansible uses (e.g. when you have multiple versions installed from Pip), please set ```ansible_controller_python_version``` manually:
-
-```
-ansible_controller_python_version:
-  major: 3
-  minor: 12
-  micro: 1
-```
 
 ## Ansible Projects
 The Controller uses the concept of 'Ansible Projects', these are folders containing everything Ansible
@@ -173,7 +149,7 @@ Now add a new subkey with the Authenticate flag
 ```
 
 ## Running Ansible jobs
-After preparing the Controller, you can run Ansible jobs as follows:
+After preparing the Controller, you can run Ansible jobs as follows (for the most current version of the helpdesk, run `runansible -h`:
 
 ```
 Usage: /usr/local/bin/runansible [-p project] [-i inventory] [-s] playbook.yml
@@ -192,3 +168,5 @@ You can run this script with cron rules like the following:
 ```
 
 The -s flag will reduce all output from playbook runs to stuff that has changed or is failed. Very useful for cron mails :-)
+
+Check the other tools provided by Ansible-Utils for more goodies and nice things to add to your toolbox!

@@ -6,6 +6,7 @@
       files:
         - "{{ ansible_facts['os_family'] }}-{{ ansible_facts['distribution_major_version'] }}.yml"
         - "{{ ansible_facts['os_family'] }}.yml"
+        - 'main.yml'
       paths:
         - 'vars'
 
@@ -13,130 +14,35 @@
   ansible.builtin.set_fact:
     ansible_controller_env:
       empty_var: 'Just_a_placeholder'
-      PATH: "/home/ansible/.local/bin:{{ ansible_facts['env']['PATH'] }}"  # Add pipx path
+      PATH: "~/.local/bin:{{ ansible_facts['env']['PATH'] }}"  # Add pipx path
 
 - name: 'Set environment facts (http_proxy)'
   ansible.builtin.set_fact:
     ansible_controller_env:
       http_proxy: "{{ http_proxy_url }}"
       https_proxy: "{{ http_proxy_url }}"
-      PATH: "/home/ansible/.local/bin:{{ ansible_facts['env']['PATH'] }}"  # Add pipx path
+      PATH: "~/.local/bin:{{ ansible_facts['env']['PATH'] }}"  # Add pipx path
   when: http_proxy_url is defined
-
-- name: 'Ensure repositories'
-  ansible.builtin.include_tasks: "repos-{{ ansible_facts['os_family'] }}.yml"
-  when: ansible_controller_setup_repos
-
-- name: 'Ensure Ansible from Package Manager'
-  when: not ansible_controller_ansible_from_pip
-  block:
-    - name: 'Ensure Ansible from Package Manager (Debian-like)'
-      ansible.builtin.apt:
-        name: "{{ ansible_controller_ansible_pkg }}"
-        state: 'present'
-        install_recommends: false
-      when: ansible_facts['os_family'] == 'Debian'
-
-    - name: 'Ensure Ansible from Package Manager (RHEL-like)'
-      ansible.builtin.dnf:
-        name: "{{ ansible_controller_ansible_pkg }}"
-        state: 'present'
-      when: ansible_facts['os_family'] == 'RedHat'
-
-- name: 'Ensure Ansible from Package Manager'
-  when: ansible_controller_ansible_from_pip
-  block:
-    - name: 'Include tasks when installing with PyPi (RHEL)'
-      ansible.builtin.include_tasks: "install-{{ ansible_controller_pip_method }}.yml"
-      when: ansible_facts['os_family'] == 'RedHat'
-
-    - name: 'Include tasks when installing with PyPi (Debian)'
-      ansible.builtin.include_tasks: "install-{{ ansible_controller_pip_method }}.yml"
-      when: ansible_facts['distribution'] == 'Debian'
-
-- name: 'Collect Ansible Python version'
-  ansible.builtin.shell: |
-    set -o pipefail
-    ansible --version | grep 'python version' | cut -d= -f2 | awk '{print $1}'
-  args:
-    executable: '/bin/bash'
-  environment: "{{ ansible_controller_env }}"
-  register: 'ansible_controller_python_version_raw'
-  changed_when: false
-
-- name: 'Generate variables with Python version'
-  ansible.builtin.set_fact:
-    ansible_controller_python_version_list: "{{ ansible_controller_python_version_raw['stdout'] | split('.') }}"
-
-- name: 'Generate variables with Python version'
-  ansible.builtin.set_fact:
-    ansible_controller_python_version:
-      major: "{{ ansible_controller_python_version_list[0] }}"
-      minor: "{{ ansible_controller_python_version_list[1] }}"
-      micro: "{{ ansible_controller_python_version_list[2] }}"
-  when: ansible_controller_python_version is undefined
 
 - name: 'Ensure supporting tools'
   ansible.builtin.package:
     name:
       - 'git'
       - 'jq'
-      - 'pwgen'
       - 'unzip'
-      - 'pinentry'
-      - "{{ ansible_controller_pip_pkg }}"
-      - "{{ ansible_controller_cryptography_pkg }}"
-      - "{{ ansible_controller_jmespath_pkg }}"
-      - "{{ ansible_controller_gpgagent_pkg }}"
-      - "{{ ansible_controller_requests_pkg }}"
-      - "{{ ansible_controller_netaddr_pkg }}"
-
-- name: 'Ensure supporting tools - non-RHEL'
-  ansible.builtin.package:
-    name:
-      - "{{ ansible_controller_passlib_pkg }}"
-  when: ansible_facts['os_family'] != 'RedHat'
-
-- name: 'Install remaining supporting tools from PyPi (RHEL)'
-  ansible.builtin.pip:
-    name:
-      - 'passlib'
-      - 'dnspython'
-      - 'ara'
+      - "{{ ansible_controller_pinentry_package }}"
+      - "{{ ansible_controller_pip_package }}"
     state: 'present'
-    umask: "0022"
-    executable: "{{ ansible_controller_pip_exe | default(omit, true) }}"
-  when:
-    - ansible_facts['os_family'] == 'RedHat'
-  environment: "{{ ansible_controller_env }}"
-
-- name: 'Ensure useraccount'
-  ansible.builtin.user:
-    name: 'ansible'
-    comment: 'Ansible Runner'
-    state: 'present'
-
-- name: 'Check linger for useraccount'
-  ansible.builtin.command: loginctl show-user ansible -p Linger
-  register: 'ansible_controller_linger'
-  changed_when: false
-  when: not _ansible_controller_molecule | default(false) | bool
-
-- name: 'Ensure linger enabled for useraccount'
-  ansible.builtin.command: loginctl enable-linger ansible
-  when:
-    - not _ansible_controller_molecule | default(false) | bool
-    - "'Linger=no' in ansible_controller_linger['stdout']"
-  changed_when: true
 
 - name: 'Ensure directories'
   ansible.builtin.file:
     path: "{{ dir }}"
     state: 'directory'
-    owner: 'ansible'
-    group: 'ansible'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
     mode: '0750'
   loop:
+    - '/opt/ansible'
     - '/opt/ansible/projects/'
     - '/opt/ansible/resources/'
     - '/opt/ansible/tools/'
@@ -144,17 +50,18 @@
   loop_control:
     loop_var: 'dir'
 
-- name: 'Ensure directories'
-  ansible.builtin.file:
-    path: '/home/ansible/.gnupg/'
-    state: 'directory'
-    owner: 'ansible'
-    group: 'ansible'
-    mode: '0700'
-
-- name: 'Set up Ansible Utils'
-  when: ansible_controller_utils_enabled
+- name: 'Set up tool chain'
+  become: false
+  environment: "{{ ansible_controller_env }}"
   block:
+    - name: 'Install PipX'
+      ansible.builtin.pip:
+        name: 'pipx'
+        executable: "pip{{ ansible_controller_python_version }}"
+        extra_args: '--user'
+        state: 'present'
+      when: ansible_facts['os_family'] == 'RedHat'
+
     - name: 'Ensure Ansible utils repo'
       ansible.builtin.git:
         repo: "{{ ansible_controller_utils_repo }}"
@@ -167,7 +74,7 @@
     - name: 'Ensure dir symlinks in Ansible Runner home'
       ansible.builtin.file:
         src: "/opt/ansible/{{ dir_link }}"
-        dest: "/home/ansible/{{ dir_link }}"
+        dest: "~/{{ dir_link }}"
         state: 'link'
       loop:
         - 'projects'
@@ -175,25 +82,12 @@
       loop_control:
         loop_var: 'dir_link'
 
-    - name: 'Ensure tool symlinks'
-      ansible.builtin.file:
-        src: "/opt/ansible/tools/ansible-utils/{{ tool_link }}"
-        dest: "/usr/local/bin/{{ tool_link }}"
-        state: 'link'
-      loop:
-        - 'encryptansible'
-        - 'runansible'
-        - 'showansible'
-        - 'gpgkey'
-      loop_control:
-        loop_var: 'tool_link'
-
     - name: 'Ensure retrieve_vault.sh'
       ansible.builtin.copy:
         src: '/opt/ansible/tools/ansible-utils/retrieve_vault.sh'
         dest: '/opt/ansible/vaults/retrieve_vault.sh'
-        owner: 'ansible'
-        group: 'ansible'
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
         mode: '0775'
         remote_src: true
 
@@ -201,7 +95,7 @@
       ansible.builtin.cron:
         name: 'Hourly GPG key check'
         minute: '0'
-        user: 'ansible'
+        user: "{{ ansible_user }}"
         job: '/usr/local/bin/gpgkey -c'
 
     - name: 'Ensure Bitwarden CLI tool'
@@ -225,21 +119,64 @@
         mode: '0644'
       when: ansible_controller_bitwarden_extra_ca | length > 0
 
-- name: 'Ensure GPG agent settings'
-  ansible.builtin.template:
-    src: 'gpg-agent.conf.j2'
-    dest: '/home/ansible/.gnupg/gpg-agent.conf'
-    owner: 'ansible'
-    group: 'ansible'
-    mode: '0640'
+    - name: 'Ensure directories'
+      ansible.builtin.file:
+        path: "~/.gnupg/"
+        state: 'directory'
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0700'
 
-- name: 'Ensure shell settings'
-  ansible.builtin.blockinfile:
-    path: '/home/ansible/.bashrc'
-    owner: 'ansible'
-    group: 'ansible'
-    marker: '# {mark} ANSIBLE-CONTROLLER ROLE MANAGED BLOCK'
-    block: "{{ lookup('file', 'bashrc') }}"
+    - name: 'Ensure GPG agent settings'
+      ansible.builtin.template:
+        src: 'gpg-agent.conf.j2'
+        dest: "~/.gnupg/gpg-agent.conf"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0640'
+
+    - name: 'Ensure shell settings'
+      ansible.builtin.blockinfile:
+        path: "~/.bashrc"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        marker: '# {mark} ANSIBLE-CONTROLLER ROLE MANAGED BLOCK'
+        block: "{{ lookup('file', 'bashrc') }}"
+
+    - name: 'Install Ansible version with PipX'
+      ansible.builtin.command:
+        cmd: "/opt/ansible/tools/ansible-utils/pipx_ansible {{ ansible_controller_version }}"
+        creates: "~/.local/share/pipx/venvs/ansible-core-{{ ansible_controller_version | replace('.', '-') }}"
+      loop: "{{ ansible_controller_versions }}"
+      loop_control:
+        loop_var: 'ansible_controller_version'
+
+- name: 'Ensure tool symlinks'
+  ansible.builtin.file:
+    src: "/opt/ansible/tools/ansible-utils/{{ tool_link }}"
+    dest: "/usr/local/bin/{{ tool_link }}"
+    state: 'link'
+  loop:
+    - 'encryptansible'
+    - 'runansible'
+    - 'showansible'
+    - 'gpgkey'
+    - 'pipx_ansible'
+  loop_control:
+    loop_var: 'tool_link'
+
+- name: 'Check linger for useraccount'
+  ansible.builtin.command: loginctl show-user {{ ansible_user }} -p Linger
+  register: 'ansible_controller_linger'
+  changed_when: false
+  when: not _ansible_controller_molecule | default(false) | bool
+
+- name: 'Ensure linger enabled for useraccount'
+  ansible.builtin.command: loginctl enable-linger {{ ansible_user }}
+  when:
+    - not _ansible_controller_molecule | default(false) | bool
+    - "'Linger=no' in ansible_controller_linger['stdout']"
+  changed_when: true
 
 - name: 'Configure for GPG agent debug logging'
   when: ansible_controller_gpg_debug
