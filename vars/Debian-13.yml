@@ -3,3 +3,4 @@ ansible_controller_python_version: '3.13'
 
 ansible_controller_pip_package: 'pipx'
 ansible_controller_pinentry_package: 'pinentry-curses'
+ansible_controller_pwgen_package: 'pwgen'

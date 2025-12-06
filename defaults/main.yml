@@ -16,3 +16,9 @@ ansible_controller_utils_repo: 'https://github.com/Thulium-Drake/ansible-utils'
 
 # Enable to extensively log GPG agent in order to debug issues with gpg-agent
 ansible_controller_gpg_debug: false
+
+# URL to download pwgen from on RHEL
+# This RPM is available in EPEL and Fedora repos only
+# Either put the name of the package, or the URL where to download it from
+ansible_controller_pwgen_rhel_package: 'https://dl.fedoraproject.org/pub/epel/9/Everything/x86_64/Packages/p/pwgen-2.08-8.el9.x86_64.rpm'
+ansible_controller_pwgen_gpgcheck: true  # If downloading the single RPM from EPEL, the gpgcheck will fail, so we skip
