@@ -1,0 +1,8 @@
+---
+ansible_controller_python_major_version: '3'
+ansible_controller_python_minor_version: '9.0.3-24'
+
+ansible_controller_pip_package: "python{{ ansible_controller_python_major_version }}-pip-{{ ansible_controller_python_minor_version }}"
+ansible_controller_pinentry_package: 'pinentry'
+ansible_controller_pwgen_package: "{{ ansible_controller_pwgen_rhel_package }}"
+
