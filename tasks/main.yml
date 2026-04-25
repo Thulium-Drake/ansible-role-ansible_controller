@@ -129,7 +129,9 @@
         owner: 'root'
         group: 'root'
         mode: '0644'
-      when: ansible_controller_bitwarden_extra_ca | length > 0
+      when:
+        - ansible_controller_utils_bitwarden | bool
+        - ansible_controller_bitwarden_extra_ca | length > 0
 
     - name: 'Ensure directories'
       ansible.builtin.file:
